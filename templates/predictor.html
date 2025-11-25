@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card fade-in">
+            <div class="card-header">
+                <h4 class="mb-0">Certificate Authenticity Predictor</h4>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-4">
+                    Upload your academic certificate to verify its authenticity using our AI model. 
+                    Supported formats: PNG, JPG, JPEG, PDF
+                </p>
+                
+                <form method="POST" enctype="multipart/form-data" class="mb-4">
+                    <div class="file-upload-area" onclick="document.getElementById('certificate').click()">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <h5>Click to upload or drag and drop</h5>
+                        <p class="text-muted">Maximum file size: 16MB</p>
+                        <input type="file" class="d-none" id="certificate" name="certificate" 
+                               accept=".png,.jpg,.jpeg,.pdf" required onchange="updateFileName()">
+                        <div id="file-name" class="text-primary mt-2 fw-bold"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg w-100 mt-3">
+                        <i class="fas fa-search me-2"></i>Analyze Certificate
+                    </button>
+                </form>
+
+                {% if prediction %}
+                <div class="prediction-result {% if prediction.is_real %}result-genuine{% else %}result-fake{% endif %} fade-in">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h4 class="mb-2">Analysis Result</h4>
+                            <div class="d-flex align-items-center mb-3">
+                                <span class="badge {% if prediction.is_real %}badge-success{% else %}badge-danger{% endif %} me-3">
+                                    {{ prediction.status }}
+                                </span>
+                                <small class="text-muted">Confidence: {{ "%.2f"|format(prediction.confidence) }}%</small>
+                            </div>
+                            <p class="mb-3"><strong>{{ prediction.message }}</strong></p>
+                            
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <div class="stat-card">
+                                        <span class="stat-number text-success">{{ "%.1f"|format(prediction.real_probability) }}%</span>
+                                        <div class="stat-label">Real Probability</div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="stat-card">
+                                        <span class="stat-number text-danger">{{ "%.1f"|format(prediction.fake_probability) }}%</span>
+                                        <div class="stat-label">Fake Probability</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <div class="confidence-visual">
+                                <div class="confidence-percentage display-4 fw-bold 
+                                    {% if prediction.confidence_level == 'high' %}text-success
+                                    {% elif prediction.confidence_level == 'medium' %}text-warning
+                                    {% else %}text-danger{% endif %}">
+                                    {{ "%.0f"|format(prediction.confidence) }}%
+                                </div>
+                                <div class="confidence-label text-muted">Confidence Score</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Confidence Bar -->
+                    <div class="mt-4">
+                        <label class="form-label">Confidence Level:</label>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill 
+                                {% if prediction.confidence_level == 'high' %}confidence-high
+                                {% elif prediction.confidence_level == 'medium' %}confidence-medium
+                                {% else %}confidence-low{% endif %}" 
+                                style="width: {{ prediction.confidence }}%">
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between mt-1">
+                            <small>0%</small>
+                            <small>50%</small>
+                            <small>100%</small>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Model Information Card -->
+        <div class="card mt-4 fade-in">
+            <div class="card-body">
+                <h5>About Our Detection System</h5>
+                <p class="mb-0">
+                    Our AI model analyzes various certificate features including logos, seals, fonts, 
+                    and digital signatures to determine authenticity. The system has been trained on 
+                    thousands of genuine and fake certificates to provide accurate results.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function updateFileName() {
+    const fileInput = document.getElementById('certificate');
+    const fileNameDisplay = document.getElementById('file-name');
+    
+    if (fileInput.files.length > 0) {
+        fileNameDisplay.textContent = 'Selected file: ' + fileInput.files[0].name;
+    } else {
+        fileNameDisplay.textContent = '';
+    }
+}
+
+// Initialize file name display on page load
+document.addEventListener('DOMContentLoaded', function() {
+    updateFileName();
+});
+</script>
+
+<!-- Add Font Awesome for icons -->
+<script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+{% endblock %}

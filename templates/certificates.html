@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>My Certificates</h2>
+    <a href="{{ url_for('upload_certificate') }}" class="btn btn-primary">Upload New Certificate</a>
+</div>
+
+{% if certificates %}
+<div class="row">
+    {% for cert in certificates %}
+    <div class="col-md-6 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ cert.name }}</h5>
+                <p class="card-text">{{ cert.description }}</p>
+                <p class="text-muted">Uploaded: {{ cert.uploaded_at.strftime('%Y-%m-%d %H:%M') }}</p>
+                <a href="{{ url_for('download_certificate', certificate_id=cert.id) }}" class="btn btn-sm btn-outline-primary">Download</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info">
+    <p>You haven't uploaded any certificates yet.</p>
+    <a href="{{ url_for('upload_certificate') }}" class="btn btn-primary">Upload Your First Certificate</a>
+</div>
+{% endif %}
+{% endblock %}

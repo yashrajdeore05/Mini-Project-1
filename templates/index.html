@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto text-center">
+        <h1 class="mb-4">Authentication Validation for Academia™</h1>
+        <p class="lead">Revolutionizing academic certificate verification using AI and Blockchain technology</p>
+        
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Certificate Verification</h5>
+                        <p class="card-text">Verify the authenticity of academic certificates using our AI-powered system</p>
+                        <a href="{{ url_for('predictor') }}" class="btn btn-primary">Verify Now</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Certificate Management</h5>
+                        <p class="card-text">Upload, store, and manage your academic certificates securely</p>
+                        <a href="{{ url_for('certificates') }}" class="btn btn-primary">Manage Certificates</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">How It Works</h5>
+                        <p class="card-text">Learn about our advanced authentication process and technology stack</p>
+                        <a href="{{ url_for('about') }}" class="btn btn-primary">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

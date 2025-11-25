@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card fade-in">
+            <div class="card-header">
+                <h4 class="mb-0">Upload Certificate</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Certificate Name</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="e.g., Bachelor of Engineering Degree" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="3" placeholder="Brief description of the certificate"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="certificate_file" class="form-label">Certificate File</label>
+                        <div class="file-upload-area" onclick="document.getElementById('certificate_file').click()">
+                            <div class="upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <h5>Click to upload or drag and drop</h5>
+                            <p class="text-muted">Supported formats: PNG, JPG, JPEG, PDF (Max 16MB)</p>
+                            <input type="file" class="d-none" id="certificate_file" name="certificate_file" 
+                                   accept=".png,.jpg,.jpeg,.pdf" required onchange="updateFileName()">
+                            <div id="file-name" class="text-primary mt-2 fw-bold"></div>
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-upload me-2"></i>Upload Certificate
+                        </button>
+                        <a href="{{ url_for('certificates') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Certificates
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function updateFileName() {
+    const fileInput = document.getElementById('certificate_file');
+    const fileNameDisplay = document.getElementById('file-name');
+    
+    if (fileInput.files.length > 0) {
+        fileNameDisplay.textContent = 'Selected file: ' + fileInput.files[0].name;
+    } else {
+        fileNameDisplay.textContent = '';
+    }
+}
+
+// Initialize file name display on page load
+document.addEventListener('DOMContentLoaded', function() {
+    updateFileName();
+});
+</script>
+{% endblock %}
